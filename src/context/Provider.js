@@ -14,7 +14,7 @@ function Provider({ children }) {
   }, []);
 
   return (
-    <starContext.Provider value={ { data } }>
+    <starContext.Provider value={ { data, setData } }>
       {children}
     </starContext.Provider>
   );

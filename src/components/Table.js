@@ -2,14 +2,40 @@ import React, { useContext, useState } from 'react';
 import starContext from '../context/Context';
 
 function Table() {
-  const { data } = useContext(starContext);
+  const { data, setData } = useContext(starContext);
   const [nameFilter, setNameFilter] = useState('');
+  const [savedOption1, setSavedOption1] = useState('population');
+  const [savedOption2, setSavedOption2] = useState('maior que');
+  const [savedOption3, setSavedOption3] = useState(0);
+  const [disableOption, setDisableOption] = useState([]);
 
   const handleInputChange = ({ target }) => {
     setNameFilter(target.value.toLowerCase());
-    console.log(nameFilter);
   };
-
+  const handleSelectedOptions1 = ({ target }) => {
+    setSavedOption1(target.value);
+  };
+  const handleSelectedOptions2 = ({ target }) => {
+    setSavedOption2(target.value);
+  };
+  const handleSelectedOptions3 = ({ target }) => {
+    setSavedOption3(target.value);
+  };
+  const handleClickButton = () => {
+    if (savedOption2 === 'maior que') {
+      const filteredData = data
+        .filter((planet) => planet[savedOption1] > parseInt(savedOption3, 10));
+      setData(filteredData);
+    } else if (savedOption2 === 'menor que') {
+      const filteredData2 = data
+        .filter((planet) => planet[savedOption1] < parseInt(savedOption3, 10));
+      setData(filteredData2);
+    } else if (savedOption2 === 'igual a') {
+      const filteredData3 = data
+        .filter((planet) => planet[savedOption1] === savedOption3);
+      setData(filteredData3);
+    }
+  };
   return (
     <main>
       <form>
@@ -20,12 +46,45 @@ function Table() {
           placeholder="Search a Planet"
           onChange={ handleInputChange }
         />
-        <label htmlFor="name-search">
-          Filter Type:
-          <select>
-            <option>Name</option>
+        <label htmlFor="column-filter">
+          Filter By Column
+          <select
+            data-testid="column-filter"
+            onChange={ handleSelectedOptions1 }
+            value={ savedOption1 }
+          >
+            <option>population</option>
+            <option>orbital_period</option>
+            <option>diameter</option>
+            <option>rotation_period</option>
+            <option>surface_water</option>
           </select>
         </label>
+        <label htmlFor="column-filter">
+          Filter By Comparison
+          <select
+            data-testid="comparison-filter"
+            onChange={ handleSelectedOptions2 }
+            value={ savedOption2 }
+          >
+            <option>maior que</option>
+            <option>menor que</option>
+            <option>igual a</option>
+          </select>
+        </label>
+        <input
+          type="number"
+          data-testid="value-filter"
+          onChange={ handleSelectedOptions3 }
+          value={ savedOption3 }
+        />
+        <button
+          data-testid="button-filter"
+          type="button"
+          onClick={ handleClickButton }
+        >
+          Filtrar
+        </button>
       </form>
       <table>
         <thead>
@@ -46,7 +105,11 @@ function Table() {
           </tr>
         </thead>
         <tbody>
-          {data.filter((element) => element.name.includes(nameFilter)).map(
+          {/* linha 53
+          -filtragem dos dados dos planetas com método filter.
+          -mapeamento dos nomes dos planetas com método map.
+          -verificação das strings dos nomes dos planetas por meio do método includes */}
+          {data.filter((element) => element.name.toLowerCase().includes(nameFilter)).map(
             ({
               name,
               rotation_period: rotation,
