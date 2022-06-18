@@ -7,7 +7,6 @@ function Table() {
   const [savedOption1, setSavedOption1] = useState('population');
   const [savedOption2, setSavedOption2] = useState('maior que');
   const [savedOption3, setSavedOption3] = useState(0);
-  const [disableOption, setDisableOption] = useState([]);
 
   const handleInputChange = ({ target }) => {
     setNameFilter(target.value.toLowerCase());
