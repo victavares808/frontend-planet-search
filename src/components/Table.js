@@ -7,6 +7,12 @@ function Table() {
   const [savedOption1, setSavedOption1] = useState('population');
   const [savedOption2, setSavedOption2] = useState('maior que');
   const [savedOption3, setSavedOption3] = useState(0);
+  const [fiterOptions, setFiterOptions] = useState(['population',
+    'orbital_period',
+    'diameter',
+    'rotation_period',
+    'surface_water',
+  ]);
 
   const handleInputChange = ({ target }) => {
     setNameFilter(target.value.toLowerCase());
@@ -34,6 +40,8 @@ function Table() {
         .filter((planet) => planet[savedOption1] === savedOption3);
       setData(filteredData3);
     }
+    const helper = fiterOptions.filter((elem) => elem !== savedOption1);
+    setFiterOptions(helper);
   };
   return (
     <main>
@@ -52,11 +60,7 @@ function Table() {
             onChange={ handleSelectedOptions1 }
             value={ savedOption1 }
           >
-            <option>population</option>
-            <option>orbital_period</option>
-            <option>diameter</option>
-            <option>rotation_period</option>
-            <option>surface_water</option>
+            { fiterOptions.map((elem) => <option key={ elem }>{ elem }</option>)}
           </select>
         </label>
         <label htmlFor="column-filter">
